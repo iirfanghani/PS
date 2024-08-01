@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Specters Of The Lost Treasury</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #eaeaea;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(20, 20, 20, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            border: 2px solid #444;
+        }
+        .header {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff6347;
+            text-shadow: 3px 3px 6px #000;
+        }
+        .text {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .button-container {
+            margin: 20px 0;
+        }
+        .button {
+            background: #8b4513;
+            color: #eaeaea;
+            border: 2px solid #666;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background 0.3s, transform 0.3s;
+            margin: 5px;
+            text-shadow: 1px 1px 3px #000;
+        }
+        .button:hover {
+            background: #a0522d;
+            border-color: #888;
+            transform: scale(1.05);
+        }
+        .button:disabled {
+            background: #555;
+            border-color: #333;
+            cursor: not-allowed;
+        }
+        .hidden {
+            display: none;
+        }
+        .back-button {
+            margin-top: 20px;
+            font-size: 1em;
+        }
+        .back-button a {
+            color: #ff6347;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px #000;
+        }
+        .back-button a:hover {
+            text-decoration: underline;
+        }
+        .quest-info {
+            margin: 10px 0;
+            font-style: italic;
+        }
+        .reward-container {
+            margin-top: 20px;
+        }
+        .reward-text {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="header">Dark Fantasy Financial RPG</div>
+        <div id="game" class="text">
+            <p>Welcome to the cursed land of Financia, a realm once rich and prosperous, now engulfed in chaos. Long ago, the kingdom thrived under the rule of the wise King Numeris. However, a series of catastrophic financial decisions, cursed by the Malevolent Mages, led to its downfall. As a hero chosen by fate, your journey will reveal the secrets of Financia's past and teach you valuable financial lessons.</p>
+            <button id="start-button" class="button">Start Your Journey</button>
+        </div>
+        <div id="game-content" class="hidden">
+            <p id="story-text"></p>
+            <div id="choices" class="button-container"></div>
+            <div id="quest-info" class="quest-info"></div>
+        </div>
+        <div id="rewards" class="hidden reward-container">
+            <p id="reward-text" class="reward-text"></p>
+            <button id="claim-reward" class="button">Claim Reward</button>
+        </div>
+        <div class="back-button">
+            <a href="games.html">Back to Games</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const lore = {
+                history: {
+                    text: "The kingdom of Financia was once a beacon of wealth and prosperity, ruled by the benevolent King Numeris. However, his reign ended tragically due to the dark influence of the Malevolent Mages. Their curse has kept the kingdom in perpetual chaos. Understanding these events will provide valuable insights into financial stability."
+                },
+                quests: {
+                    start: {
+                        text: "You have been chosen to restore balance to the kingdom. Your journey begins in the ruined capital. Will you seek out the lost relics of Numeris's reign or uncover the hidden plots of the Malevolent Mages? Each path will provide you with insights into financial strategies and concepts.",
+                        choices: {
+                            relics: {
+                                text: "Search for the Lost Relics",
+                                next: "relics"
+                            },
+                            mages: {
+                                text: "Investigate the Malevolent Mages",
+                                next: "mages"
+                            }
+                        }
+                    },
+                    relics: {
+                        text: "You venture into the crumbling halls of the royal treasury, now overrun by monstrous creatures. Here, you might uncover the ancient relics that hold the power to break the curse. This quest will teach you about budgeting and the importance of managing resources effectively.",
+                        choices: {
+                            brave: {
+                                text: "Brave the dangers",
+                                next: "treasury"
+                            },
+                            spirits: {
+                                text: "Seek guidance from the spirits",
+                                next: "spirits"
+                            }
+                        },
+                        reward: "You have earned 50 experience points and discovered the 'Scroll of Budgeting'!"
+                    },
+                    mages: {
+                        text: "The Malevolent Mages are rumored to reside in the Dark Spire, a place shrouded in dark magic. Investigating their hideout might reveal the source of the curse. This quest will offer insights into investment strategies and the dangers of financial deception.",
+                        choices: {
+                            infiltrate: {
+                                text: "Infiltrate the Dark Spire",
+                                next: "spires"
+                            },
+                            undo: {
+                                text: "Undo their magic from afar",
+                                next: "undo"
+                            }
+                        },
+                        reward: "You have earned 70 experience points and obtained the 'Financial Planner'!"
+                    },
+                    treasury: {
+                        text: "In the heart of the treasury, you encounter fierce guardians and cursed traps. After overcoming these challenges, you find an ancient scroll detailing the kingdom's greatest secrets. This knowledge includes principles of saving, investing wisely, and managing debt.",
+                        choices: {
+                            return: {
+                                text: "Return to the capital",
+                                next: "start"
+                            }
+                        },
+                        reward: "You have earned 50 experience points and discovered the 'Scroll of Budgeting'!"
+                    },
+                    spirits: {
+                        text: "The spirits of Financia’s past appear, sharing their wisdom and guiding you through the mysteries of the curse. They provide insights into financial planning, risk management, and the importance of financial literacy.",
+                        choices: {
+                            return: {
+                                text: "Return to the capital",
+                                next: "start"
+                            }
+                        },
+                        reward: "You have gained 30 experience points and acquired the 'Financial Planning Tool'!"
+                    },
+                    spires: {
+                        text: "The Dark Spire is filled with dark magic and treacherous traps. After successfully navigating the spire, you confront the leader of the Malevolent Mages. A battle ensues, revealing secrets about the curse and important lessons on financial ethics and transparency.",
+                        choices: {
+                            return: {
+                                text: "Return to the capital",
+                                next: "start"
+                            }
+                        },
+                        reward: "You have achieved 100 experience points and unlocked 'Advanced Investment Strategies'!"
+                    },
+                    undo: {
+                        text: "Attempting to undo the magic from afar requires powerful rituals and ancient artifacts. This quest teaches about strategic planning, financial foresight, and the consequences of financial decisions.",
+                        choices: {
+                            return: {
+                                text: "Return to the capital",
+                                next: "start"
+                            }
+                        },
+                        reward: "You have earned 70 experience points and obtained the 'Strategic Financial Planner'!"
+                    }
+                },
+                characters: {
+                    kingNumeris: {
+                        text: "King Numeris was the last wise ruler of Financia. His reign ended tragically due to the dark influence of the Malevolent Mages. His legacy includes valuable financial principles that can guide you in your quest."
+                    },
+                    malevolentMages: {
+                        text: "The Malevolent Mages are dark sorcerers who sought to destroy Financia out of envy and greed. Their curse has kept the kingdom in perpetual chaos. Confronting them may reveal hidden truths about the curse and important financial lessons."
+                    }
+                },
+                worldEvents: {
+                    fallOfFinancia: {
+                        text: "The fall of Financia was marked by economic collapse, internal strife, and a curse that decimated its wealth. The kingdom's downfall has left it in ruins, but it also holds secrets that can teach you valuable financial lessons."
+                    }
+                }
+            };
+
+            let currentQuest = 'start';
+            let experiencePoints = 0;
+            let rewardText = '';
+
+            document.getElementById('start-button').addEventListener('click', startQuest);
+
+            function startQuest() {
+                document.getElementById('game').classList.add('hidden');
+                document.getElementById('game-content').classList.remove('hidden');
+                showQuest(lore.quests[currentQuest]);
+            }
+
+            function showQuest(quest) {
+                document.getElementById('story-text').textContent = quest.text;
+                const choicesContainer = document.getElementById('choices');
+                choicesContainer.innerHTML = '';
+
+                for (const key in quest.choices) {
+                    if (quest.choices.hasOwnProperty(key)) {
+                        const choice = quest.choices[key];
+                        const button = document.createElement('button');
+                        button.textContent = choice.text;
+                        button.className = 'button';
+                        button.addEventListener('click', () => chooseOption(key));
+                        choicesContainer.appendChild(button);
+                    }
+                }
+
+                if (quest.reward) {
+                    rewardText = getRewardText(quest.reward);
+                    document.getElementById('rewards').classList.remove('hidden');
+                    document.getElementById('reward-text').textContent = rewardText;
+                } else {
+                    document.getElementById('rewards').classList.add('hidden');
+                }
+            }
+
+            function getRewardText(reward) {
+                let description;
+                if (reward.includes('Scroll of Budgeting')) {
+                    description = "You've discovered the 'Scroll of Budgeting'! This ancient artifact teaches you the importance of managing your resources wisely. By following its principles, you'll learn to create a budget that helps prevent overspending and ensures financial stability.";
+                } else if (reward.includes('Financial Planner')) {
+                    description = "You've acquired the 'Financial Planner'! This item helps you track your income and expenses, plan for future investments, and set financial goals. It's an essential tool for effective financial management and long-term success.";
+                } else if (reward.includes('Financial Planning Tool')) {
+                    description = "You've obtained the 'Financial Planning Tool'! This resource aids you in organizing your financial plans, assessing risks, and making informed decisions. It’s invaluable for developing a comprehensive financial strategy.";
+                } else if (reward.includes('Advanced Investment Strategies')) {
+                    description = "You've unlocked 'Advanced Investment Strategies'! This knowledge provides deeper insights into investment options, helping you make more strategic decisions and maximize your returns. Learn to diversify your portfolio and evaluate investment risks.";
+                } else if (reward.includes('Strategic Financial Planner')) {
+                    description = "You've received the 'Strategic Financial Planner'! This planner offers advanced features for forecasting your financial future, optimizing your investment strategies, and planning for significant financial milestones.";
+                } else if (reward.includes('experience points')) {
+                    description = `You have gained ${reward.match(/\d+/)[0]} experience points! These points reflect your progress and learning throughout the journey. Each point helps you understand and master financial concepts more deeply.`;
+                }
+                return description || reward;
+            }
+
+            function chooseOption(option) {
+                const currentQuestData = lore.quests[currentQuest];
+                if (currentQuestData && currentQuestData.choices && currentQuestData.choices[option]) {
+                    const nextQuest = currentQuestData.choices[option];
+                    currentQuest = nextQuest.next;
+                    showQuest(lore.quests[currentQuest]);
+                    if (lore.quests[currentQuest].reward) {
+                        experiencePoints += parseInt(lore.quests[currentQuest].reward.match(/\d+/)[0]);
+                    }
+                } else {
+                    alert('Invalid choice. Please try again.');
+                }
+            }
+
+            document.getElementById('claim-reward').addEventListener('click', () => {
+                if (rewardText) {
+                    alert(rewardText);
+                    experiencePoints = 0;
+                    document.getElementById('rewards').classList.add('hidden');
+                    rewardText = '';  // Clear reward text after claiming
+                    startQuest();  // Restart the quest from the beginning
+                } else {
+                    alert('No reward to claim.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

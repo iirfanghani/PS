@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Team 2 webpage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .containera {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            margin: 20px 0;
+        }
+
+        .section h2 {
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            color: #fff;
+            background-color: rgb(111, 182, 205);
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: rgb(111, 182, 205);
+        }
+
+        .form-group {
+            margin: 10px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .transaction-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .transaction-list li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .transaction-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="index.html">Home</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Account.html">Account</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Transaction.html">Transaction</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Budget.html">Budget</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Parents.html">Parents Control</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Games.html">Game</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <h1>One Bank</h1>
+        <br>
+        <div class="containera">
+            <!-- View Transaction History -->
+            <div class="section">
+                <h2>View Transaction History</h2>
+                <ul id="transaction-list" class="transaction-list">
+                    <li data-name="Alicia" data-date="2024-07-16">Transaction 1: Alicia $100.00 - 16-07-2024</li>
+                    <li data-name="Irfan" data-date="2024-07-17">Transaction 2: Irfan $350.00 - 17-07-2024</li>
+                    <li data-name="Issac" data-date="2024-07-18">Transaction 3: Issac $200.00 - 18-07-2024</li>
+                    <li data-name="Mohammad" data-date="2024-07-19">Transaction 4: Mohammad $150.00 - 19-07-2024</li>
+                    <li data-name="Yupin" data-date="2024-07-20">Transaction 5: Yupin $250.00 - 20-07-2024</li>
+                    <li data-name="Sijun" data-date="2024-07-21">Transaction 6: Sijun $300.00 - 21-07-2024</li>
+                </ul>
+            </div>
+
+            <!-- Search and Filter Transactions -->
+            <div class="section">
+                <h2>Search and Filter Transactions</h2>
+                <div class="form-group">
+                    <label for="search">Search Transactions</label>
+                    <input type="text" id="search" placeholder="Enter name...">
+                </div>
+                <div class="form-group">
+                    <label for="filter">Filter by Date</label>
+                    <input type="date" id="filter">
+                </div>
+                <a href="#" class="btn" id="search-btn">Search</a>
+            </div>
+
+            <!-- Initiate Transfer and Payments -->
+            <div class="section">
+                <h2>Initiate Transfer and Payments</h2>
+                <div class="form-group">
+                    <label for="name">Enter name</label>
+                    <input type="text" id="name" placeholder="Enter name...">
+                </div>
+                <div class="form-group">
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" placeholder="Enter amount...">
+                </div>
+                <div class="form-group">
+                    <label for="account">Select Account</label>
+                    <select id="account">
+                        <option value="savings">Savings Account</option>
+                        <option value="checking">Checking Account</option>
+                    </select>
+                </div>
+                <a href="#" class="btn" id="transfer-btn">Transfer</a>
+            </div>
+        </div>
+
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const searchValue = document.getElementById('search').value.toLowerCase();
+            const filterValue = document.getElementById('filter').value;
+            const transactionList = document.getElementById('transaction-list').getElementsByTagName('li');
+
+            for (let i = 0; i < transactionList.length; i++) {
+                const name = transactionList[i].getAttribute('data-name').toLowerCase();
+                const date = transactionList[i].getAttribute('data-date');
+
+                if ((searchValue && name.includes(searchValue)) || (filterValue && date === filterValue) || (!searchValue && !filterValue)) {
+                    transactionList[i].style.display = '';
+                } else {
+                    transactionList[i].style.display = 'none';
+                }
+            }
+        });
+
+        document.getElementById('transfer-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const amount = document.getElementById('amount').value;
+            const account = document.getElementById('account').value;
+
+            if (name && amount && account) {
+                const transactionList = document.getElementById('transaction-list');
+                const currentDate = new Date().toISOString().split('T')[0];
+                const newTransaction = document.createElement('li');
+                newTransaction.setAttribute('data-name', name);
+                newTransaction.setAttribute('data-date', currentDate);
+                newTransaction.textContent = `Transfer to ${name} $${amount} - ${currentDate}`;
+                transactionList.appendChild(newTransaction);
+
+                alert(`Transfer of $${amount} to ${name} from ${account} account was successful.`);
+                // You can add your backend transfer logic here
+            } else {
+                alert('Please fill in all fields.');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

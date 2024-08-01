@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Team 2 webpage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<!--Yu Pin's code-->
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+        }
+
+    #h1 {
+        margin-left: -900px;
+        font-family: "Poppins", sans-serif;
+        font-size: 45px;
+    }
+
+    #h2 {
+        margin-top: 70px;
+        margin-left: 400px;
+        font-family: "Poppins", sans-serif;
+        font-size: 22px;
+    }
+
+    #date {
+        color: black;
+        margin-top: 30px;
+        margin-left: 500px;
+    }
+
+    #date #input {
+        border-radius: 10px;
+    }
+
+    #limit {
+        margin-left: 500px;
+        margin-top: 40px;
+        color: black;
+    }
+
+    #btn {
+        margin-top: 50px;
+        margin-left: 900px;
+        font-size: 13px;
+        width: 50px;
+    }
+
+    #h1_01 {
+        margin-left: -750px;
+        font-family: "Poppins", sans-serif;
+        font-size: 30px;
+        margin-top: 50px;
+    }
+
+    table, th, td {
+        border:1px solid black;
+        background-color: white;
+        color: black;
+    }
+
+</style>
+
+<body>
+    
+    <header>
+        <nav>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="index.html">Home</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Account.html">Account</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Transaction.html">Transaction</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Budget.html">Budget</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Parents.html">Parents Control</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Games.html">Game</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <h1>One Bank </h1>
+    </section>
+
+<!--Yu Pin's code-->
+<!--joint account, syncs with parent account-->
+
+<!--I added two images as well-->
+    <!--child's account can be sync to parent's account (joint account)-->
+    <div style="min-height: 70px; margin-top: 20px;">
+        <img style="width: 35px; border-radius: 45px; margin-left: 1010px;" src="Repeat-icon1.png">
+        <div style="background-color: white; margin-left: 1055px; margin-top: -25px; width: 80px; min-height: 27px; border-radius: 10px;">
+            <div style="margin-left: 17px; color: rgb(110, 238, 195); font-weight: 700;">Parent </div>
+        </div>
+        <img style="width: 27px; border-radius: 45px; margin-left: 1140px; margin-top: -50px;" src="pfp1.jpg">
+        <div id="add_accounts" style="color: black; font-size: 13px; margin-left: 1175px; margin-top: -18px;">+ Add</div>
+    </div>
+    <div style=" min-height: 900px; margin-top: 10px;">
+        <h1 id="h1">Parental Controls</h1>
+        <!--parent to set transaction limit-->
+        <div>
+            <h2 id="h2">Transaction limit:</h2>
+            <div id="date">
+                From: <input type="date" id="input">
+                &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                To: <input type="date" id="input">
+            </div>
+            <div id="limit">Limit: <input type="text" placeholder="amount"></div>
+            <button id="btn">Edit</button>
+        </div>
+        <!--extra earnings from parents for child to feel motivated to save up their money-->
+        <!--function will auto transfer money from parent's bank to child's bank
+        once child completes a task and ticks the checkbox-->
+        <div>
+            <h1 id="h1_01">Extra earnings</h1>
+            <h2 id="h2" style="margin-top: 30px;">Tasks:</h2>
+            <div style="margin-left: 500px; margin-top: 40px;">
+                <table style="width: 50%; font-size: 17px;">
+                    <tr>
+                        <th>no.</th>
+                        <th>Tasks</th>
+                        <th>done?</th>
+                    </tr>
+                        <tr>
+                            <td>1.</td>
+                            <td>Tidy up the room</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $5</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2.</td>
+                            <td>Wash the car</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $15</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3.</td>
+                            <td>Finish homework</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $10</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4.</td>
+                            <td>Buy groceries</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $10</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>5.</td>
+                            <td>Wash the toilet</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $15</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>6.</td>
+                            <td>Cook dinner</td>
+                            <td>
+                                <div style="display: flex;">
+                                    <div><input type="checkbox" id="input"></div>
+                                    <div style="margin-left: 15px;">+ $20</div>
+                                </div>
+                            </td>
+                        </tr>
+                </table>
+                <p style="margin-top: 10px; margin-left: 430px; color: black;">earned:</p>
+            </div>
+        </div>
+    </div>
+
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

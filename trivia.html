@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Gauntlet</title>
+    <style>
+        body {
+            background: #24282f;
+            font-family: 'Alegreya Sans', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .game-container, .mode-container {
+            background: rgba(6, 18, 53, .8);
+            border-radius: 8px;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        h1 {
+            color: #3792e3;
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background: #1e2a38;
+            border: 1px solid #3792e3;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .button:hover {
+            background: #3792e3;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .option {
+            background: #1e2a38;
+            border: 1px solid #3792e3;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .option:hover {
+            background: #3792e3;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .option.correct {
+            background: #28a745;
+            color: #fff;
+        }
+
+        .option.incorrect {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .feedback {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .home-button {
+            background: #3792e3;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: background 0.3s;
+        }
+
+        .home-button:hover {
+            background: #2c313a;
+        }
+
+        .score {
+            font-size: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .timer {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .explanation {
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="mode-container" id="mode-container">
+        <h1>Choose Your Game Mode</h1>
+        <div class="button" onclick="startGame('classic')">Classic Mode</div>
+        <div class="button" onclick="startGame('timed')">Timed Challenge Mode</div>
+    </div>
+
+    <div class="game-container" id="game-container" style="display: none;">
+        <h1 id="game-title">Knowledge Gauntlet</h1>
+        <div class="timer" id="timer" style="display: none;">Time Left: 30s</div>
+        <div class="progress" id="progress">Question 1 of 3</div>
+        <div class="question-container">
+            <div class="question">
+                <p id="question-text">What is the primary goal of financial risk management?</p>
+                <ul class="options" id="options-list">
+                    <!-- Options will be dynamically inserted here -->
+                </ul>
+            </div>
+        </div>
+        <div class="feedback"></div>
+        <div class="explanation" id="explanation"></div>
+        <div class="score"></div>
+        <button class="home-button" onclick="window.location.href='Games.html';">Back to Home</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                text: "What is the primary goal of financial risk management?",
+                options: [
+                    { text: "To avoid all financial risks", correct: false, explanation: "Avoiding all risks is impractical. The goal is to manage and mitigate risks." },
+                    { text: "To identify, analyze, and manage financial risks", correct: true, explanation: "Effective risk management involves identifying and handling risks to minimize their impact." },
+                    { text: "To ignore financial risks and focus on investments", correct: false, explanation: "Ignoring risks can lead to significant financial losses. Risk management is crucial for financial stability." },
+                    { text: "To invest in high-risk ventures only", correct: false, explanation: "Investing in high-risk ventures without a risk management strategy can be detrimental." }
+                ]
+            },
+            {
+                text: "What is a common method for managing investment risk?",
+                options: [
+                    { text: "Diversification", correct: true, explanation: "Diversification helps spread risk across different investments, reducing potential losses." },
+                    { text: "Putting all money in a single stock", correct: false, explanation: "Concentrating investment in a single stock increases risk. Diversification is key to managing it." },
+                    { text: "Ignoring market trends", correct: false, explanation: "Ignoring market trends can lead to poor investment decisions. Being aware of them is important for risk management." },
+                    { text: "Investing in volatile assets only", correct: false, explanation: "Focusing solely on volatile assets can increase risk. A balanced approach is better." }
+                ]
+            },
+            {
+                text: "What is an example of a financial planning strategy?",
+                options: [
+                    { text: "Creating a budget", correct: true, explanation: "A budget helps track income and expenses, which is essential for effective financial planning." },
+                    { text: "Avoiding all forms of credit", correct: false, explanation: "While minimizing debt is important, avoiding credit entirely can limit financial flexibility." },
+                    { text: "Spending without tracking expenses", correct: false, explanation: "Failing to track expenses can lead to overspending and financial instability." },
+                    { text: "Investing in speculative ventures", correct: false, explanation: "Speculative ventures can be risky. A well-rounded financial plan includes diverse strategies." }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        const totalQuestions = questions.length;
+        let timer;
+        let timeLeft = 30;
+        let mode = 'classic';
+
+        function startGame(selectedMode) {
+            mode = selectedMode;
+            document.getElementById('mode-container').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            document.getElementById('question-text').textContent = question.text;
+            const optionsList = document.getElementById('options-list');
+            optionsList.innerHTML = '';
+
+            question.options.forEach(option => {
+                const li = document.createElement('li');
+                li.className = 'option';
+                li.dataset.correct = option.correct;
+                li.dataset.explanation = option.explanation;
+                li.textContent = option.text;
+                li.addEventListener('click', handleOptionClick); // Add event listener here
+                optionsList.appendChild(li);
+            });
+
+            document.getElementById('progress').textContent = `Question ${currentQuestionIndex + 1} of ${totalQuestions}`;
+
+            if (mode === 'timed') {
+                startTimer();
+            } else {
+                document.getElementById('timer').style.display = 'none'; // Hide timer in classic mode
+            }
+        }
+
+        function handleOptionClick(event) {
+            const selectedOption = event.target;
+            const isCorrect = selectedOption.dataset.correct === 'true';
+            const explanation = selectedOption.dataset.explanation;
+
+            if (isCorrect) {
+                selectedOption.classList.add('correct');
+                document.querySelector('.feedback').textContent = 'Correct! Well done.';
+                score++;
+            } else {
+                selectedOption.classList.add('incorrect');
+                document.querySelector('.feedback').textContent = 'Incorrect. Try again!';
+            }
+
+            document.querySelector('.explanation').textContent = explanation;
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.removeEventListener('click', handleOptionClick);
+            });
+
+            if (mode === 'timed') {
+                clearInterval(timer);
+            }
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < totalQuestions) {
+                    loadQuestion();
+                } else {
+                    showFinalScore();
+                }
+            }, 2000);
+        }
+
+        function showFinalScore() {
+            document.querySelector('.question-container').style.display = 'none';
+            document.querySelector('.score').textContent = `Game Over! Your final score is ${score} out of ${totalQuestions}.`;
+            document.querySelector('.home-button').style.display = 'block';
+        }
+
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById('timer').style.display = 'block';
+            document.getElementById('timer').textContent = `Time Left: ${timeLeft}s`;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Time Left: ${timeLeft}s`;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    handleOptionClick({ target: null });  // Trigger the next question
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

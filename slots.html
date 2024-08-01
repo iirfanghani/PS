@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Slot Machine</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #1e1e1e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .slot-machine-container {
+            text-align: center;
+            background: #333;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slot-machine {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .slot {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #f39c12;
+            border-radius: 15px;
+            background: #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            color: #f39c12;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            margin: 0 10px;
+            position: relative;
+            transition: transform 0.6s ease-out, background-color 0.6s ease-out;
+        }
+
+        .slot.spin {
+            animation: spin 1s ease-in-out;
+        }
+
+        .slot.win {
+            background-color: #2ecc71;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .spin-button, .go-back-button, .go-to-games-button {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #f39c12;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            margin-top: 20px;
+        }
+
+        .spin-button:hover, .go-back-button:hover, .go-to-games-button:hover {
+            background-color: #e67e22;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ecf0f1;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+        }
+
+        .points {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #f39c12;
+        }
+
+        .mode-selector {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        .mode-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #f39c12;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            transition: background-color 0.3s, box-shadow 0.3s;
+            margin: 5px;
+        }
+
+        .mode-button:hover {
+            background-color: #e67e22;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-1000px); opacity: 0; }
+        }
+
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f39c12;
+            opacity: 0;
+            animation: confetti 1.5s ease-out forwards;
+        }
+
+        .timer {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slot-machine-container">
+        <div id="mode-selector" class="mode-selector">
+            <button id="classic-mode" class="mode-button">Classic Mode</button>
+            <button id="time-attack" class="mode-button">Time Attack</button>
+            <button id="score-challenge" class="mode-button">Score Challenge</button>
+            <button id="lucky-spin" class="mode-button">Lucky Spin</button>
+            
+        </div>
+        <div class="slot-machine" id="slot-machine" style="display: none;">
+            <div id="slot1" class="slot">0</div>
+            <div id="slot2" class="slot">0</div>
+            <div id="slot3" class="slot">0</div>
+        </div>
+        <button id="spin-button" class="spin-button" style="display: none;">Spin</button>
+        <button id="go-back-button" class="go-back-button" style="display: none;">Go Back</button>
+        <button id="go-to-games-button" class="go-to-games-button" style="display: none;">Go to Games</button>
+        <div id="message" class="message"></div>
+        <div id="points" class="points" style="display: none;">Points: 0</div>
+        <div id="timer" class="timer" style="display: none;"></div>
+        <div id="confetti" class="confetti"></div>
+    </div>
+
+    <script>
+        let points = 0;
+        let mode = 'classic'; // Default mode
+        let timer;
+        let timeLeft = 30; // Time limit for Time Attack mode
+
+        const tips = [
+            "Create a budget and stick to it.",
+            "Prioritize high-interest debts first.",
+            "Negotiate lower interest rates with creditors.",
+            "Use the snowball method to pay off debts.",
+            "Consider consolidating your debts."
+        ];
+
+        function getRandomTip() {
+            return tips[Math.floor(Math.random() * tips.length)];
+        }
+
+        function resetSlots() {
+            document.querySelectorAll('.slot').forEach(slot => {
+                slot.classList.remove('spin', 'win');
+                slot.style.transform = '';
+                slot.style.backgroundColor = '';
+            });
+        }
+
+        function createConfetti() {
+            const confettiContainer = document.getElementById('confetti');
+            for (let i = 0; i < 100; i++) {
+                const confettiPiece = document.createElement('div');
+                confettiPiece.className = 'confetti-piece';
+                confettiPiece.style.left = `${Math.random() * 100}%`;
+                confettiPiece.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                confettiPiece.style.animationDelay = `${Math.random() * 2}s`;
+                confettiContainer.appendChild(confettiPiece);
+            }
+        }
+
+        function updateTimer() {
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.innerText = `Time Left: ${timeLeft}s`;
+            timeLeft -= 1;
+            if (timeLeft < 0) {
+                clearInterval(timer);
+                document.getElementById('spin-button').disabled = true;
+                document.getElementById('message').innerText = `Time's up! Final Score: ${points}`;
+            }
+        }
+
+        function spinSlots() {
+            resetSlots();
+            const slots = [document.getElementById('slot1'), document.getElementById('slot2'), document.getElementById('slot3')];
+            const randomValues = slots.map(() => Math.floor(Math.random() * tips.length));
+            const message = document.getElementById('message');
+            const confettiContainer = document.getElementById('confetti');
+            const pointsDisplay = document.getElementById('points');
+
+            // Simulate the spinning effect
+            slots.forEach((slot, index) => {
+                slot.classList.add('spin');
+                setTimeout(() => {
+                    slot.innerText = randomValues[index] + 1;
+                    slot.classList.remove('spin');
+                    slot.classList.add(randomValues[index] === randomValues[0] ? 'win' : '');
+                }, index * 200); // Stagger the reveal for effect
+            });
+
+            // Check for win condition
+            setTimeout(() => {
+                if (randomValues[0] === randomValues[1] && randomValues[1] === randomValues[2]) {
+                    const rewardMessage = `Jackpot! ${getRandomTip()}`;
+                    message.innerText = rewardMessage;
+                    points += 10; // Increase points for jackpot
+                    pointsDisplay.innerText = `Points: ${points}`;
+                    createConfetti();
+                } else {
+                    message.innerText = "Try again!";
+                    while (confettiContainer.firstChild) {
+                        confettiContainer.removeChild(confettiContainer.firstChild);
+                    }
+                }
+            }, 600); // Match this with the spinning effect duration
+        }
+
+        function startGame() {
+            document.getElementById('mode-selector').style.display = 'none';
+            document.getElementById('slot-machine').style.display = 'flex';
+            document.getElementById('spin-button').style.display = 'block';
+            document.getElementById('go-back-button').style.display = 'block';
+            document.getElementById('go-to-games-button').style.display = 'block';
+            document.getElementById('points').style.display = 'block';
+            if (mode === 'time-attack') {
+                timeLeft = 30;
+                document.getElementById('timer').style.display = 'block';
+                timer = setInterval(updateTimer, 1000);
+            } else {
+                document.getElementById('timer').style.display = 'none';
+                if (timer) {
+                    clearInterval(timer);
+                }
+            }
+        }
+
+        function goBack() {
+            document.getElementById('mode-selector').style.display = 'block';
+            document.getElementById('slot-machine').style.display = 'none';
+            document.getElementById('spin-button').style.display = 'none';
+            document.getElementById('go-back-button').style.display = 'none';
+            document.getElementById('go-to-games-button').style.display = 'none';
+            document.getElementById('points').style.display = 'none';
+            document.getElementById('timer').style.display = 'none';
+            document.getElementById('message').innerText = '';
+            points = 0;
+            document.getElementById('points').innerText = `Points: ${points}`;
+            while (document.getElementById('confetti').firstChild) {
+                document.getElementById('confetti').removeChild(document.getElementById('confetti').firstChild);
+            }
+        }
+
+        function goToGames() {
+            window.location.href = 'games.html'; // Navigate to the games.html page
+        }
+
+        document.getElementById('classic-mode').addEventListener('click', function() {
+            mode = 'classic';
+            startGame();
+        });
+
+        document.getElementById('time-attack').addEventListener('click', function() {
+            mode = 'time-attack';
+            startGame();
+        });
+
+        document.getElementById('score-challenge').addEventListener('click', function() {
+            mode = 'score-challenge';
+            startGame();
+        });
+
+        document.getElementById('lucky-spin').addEventListener('click', function() {
+            mode = 'lucky-spin';
+            startGame();
+        });
+
+        document.getElementById('spin-button').addEventListener('click', function() {
+            spinSlots();
+        });
+
+        document.getElementById('go-back-button').addEventListener('click', function() {
+            goBack();
+        });
+
+        document.getElementById('go-to-games-button').addEventListener('click', function() {
+            goToGames();
+        });
+    </script>
+</body>
+</html>

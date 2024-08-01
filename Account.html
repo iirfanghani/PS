@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Youth Banking - Account Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        h1, h2 {
+            color: #007bff;
+        }
+
+        .form-control {
+            border-radius: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .card {
+            border-radius: 0.75rem;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #007bff;
+            color: white;
+            border-radius: 0.75rem 0.75rem 0 0;
+            font-weight: bold;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+        }
+
+        .table-section {
+            margin-top: 20px;
+        }
+
+        .table-section h3 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            position: relative;
+            height: 1.5rem;
+            background-color: #e9ecef;
+            border-radius: 0.75rem;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 0.75rem;
+            transition: width 0.6s ease;
+        }
+
+        .progress-bar.completed {
+            background-color: #28a745;
+        }
+
+        .progress-bar.in-progress {
+            background-color: #007bff;
+        }
+
+        .pie-chart-container {
+            margin-top: 20px;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .row .col-md-6 {
+            margin-bottom: 1rem;
+        }
+
+        .budget-section {
+            margin-top: 20px;
+        }
+
+        .budget-card {
+            max-height: 400px;
+            overflow: auto;
+        }
+
+        .edit-button {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <a href="index.html">Home</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Account.html">Account</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Transaction.html">Transaction</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Budget.html">Budget</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Parents.html">Parents Control</a>
+                    </div>
+                    <div class="col-sm-2">
+                        <a href="Games.html">Game</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section class="container">
+        <h1 class="mb-4 text-center">Account Page</h1>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Parental/Guardian Information
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary edit-button" onclick="toggleEdit()">Edit</button>
+                        <form id="guardianForm">
+                            <div class="mb-3">
+                                <label for="guardianName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="guardianName" placeholder="John Tan" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guardianId" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="guardianId" placeholder="S1234567A" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guardianPhone" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="guardianPhone" placeholder="+65 9123 4567" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guardianAddress" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="guardianAddress" placeholder="123 Orchard Road, #04-56, Singapore 238888" readonly>
+                            </div>
+                        </form>
+
+                        <!-- Budgeting Section for Parents -->
+                        <div class="budget-section">
+                            <div class="card budget-card">
+                                <div class="card-header">
+                                    Budget Overview
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-4">Amount saved using the budgeting tool:</p>
+                                    <p><strong>$1,200</strong></p> <!-- Example amount saved -->
+                                    <div class="pie-chart-container">
+                                        <canvas id="budgetPieChart"></canvas>
+                                    </div>
+                                    <p class="mt-3">Note: Amount saved using the budgeting tool.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Child Information
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="childName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="childName" placeholder="Samantha Tan" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="childId" class="form-label">ID</label>
+                                <input type="text" class="form-control" id="childId" placeholder="S7654321B" readonly>
+                            </div>
+                        </form>
+
+                        <div class="table-section">
+                            <h3>Completed Courses</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="completedCourses">
+                                    <tr>
+                                        <td>Introduction to Finance</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" onclick="editCourse(this)">Edit</button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Budgeting Basics</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-warning" onclick="editCourse(this)">Edit</button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="table-section">
+                            <h3>In Progress Courses</h3>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Course Name</th>
+                                        <th scope="col">Progress</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inProgressCourses">
+                                    <tr>
+                                        <td>Advanced Saving Strategies</td>
+                                        <td>
+                                            <div class="progress-bar-container">
+                                                <div class="progress-bar in-progress" style="width: 50%;"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Investment 101</td>
+                                        <td>
+                                            <div class="progress-bar-container">
+                                                <div class="progress-bar in-progress" style="width: 30%;"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="text-center py-3 mt-4">
+        <p>&copy; 2024 Youth Banking. All rights reserved.</p>
+    </footer>
+
+    <!-- Load Chart.js and Bootstrap scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleEdit() {
+            const form = document.getElementById('guardianForm');
+            const inputs = form.querySelectorAll('input');
+            const isReadOnly = inputs[0].hasAttribute('readonly');
+            inputs.forEach(input => {
+                if (isReadOnly) {
+                    input.removeAttribute('readonly');
+                    input.focus();
+                } else {
+                    input.setAttribute('readonly', 'readonly');
+                }
+            });
+            document.querySelector('.edit-button').textContent = isReadOnly ? 'Save' : 'Edit';
+        }
+
+        function addCourse(type) {
+            const courseName = prompt("Enter the course name:");
+            if (courseName) {
+                const tableBody = type === 'completed' ? document.getElementById('completedCourses') : document.getElementById('inProgressCourses');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${courseName}</td>
+                    <td>${type === 'inProgress' ? '<div class="progress-bar-container"><div class="progress-bar in-progress" style="width: 0%;"></div></div>' : ''}</td>
+                    <td>${type === 'inProgress' ? '<button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>' : '<button class="btn btn-sm btn-warning" onclick="editCourse(this)">Edit</button><button class="btn btn-sm btn-danger" onclick="deleteCourse(this)">Delete</button>'}</td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+
+        function editCourse(button) {
+            const row = button.parentElement.parentElement;
+            const courseName = row.children[0].innerText;
+            const newCourseName = prompt("Edit the course name:", courseName);
+            if (newCourseName) {
+                row.children[0].innerText = newCourseName;
+            }
+        }
+
+        function deleteCourse(button) {
+            const row = button.parentElement.parentElement;
+            row.remove();
+        }
+
+        // Budget Pie Chart
+        const ctx = document.getElementById('budgetPieChart').getContext('2d');
+        const budgetPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Food ($300)', 'Travel ($200)', 'Miscellaneous ($400)', 'Shopping ($300)'],
+                datasets: [{
+                    label: 'Saved Amount Distribution',
+                    data: [300, 200, 400, 300], // Example data in dollars
+                    backgroundColor: [
+                        '#FF6384',
+                        '#36A2EB',
+                        '#FFCE56',
+                        '#E0E0E0'
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                if (context.parsed !== null) {
+                                    label += `: $${context.raw}`;
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
